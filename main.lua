@@ -10,9 +10,8 @@ local useHTTPS = true
 
 local http = require "http"
 local querystring = require "querystring"
-local json = require "json-rxi"
+local json = require "json"
 local fs = require "fs"
-local utf8 = require "utf8"
 
 local types = {
 	json = "application/json",
@@ -72,15 +71,14 @@ local function onRequest_real(req, res, url)
             if command == "create" then
                 -- new comment!
                 local parsed = json.decode(req.body or "{}")
-                print(json.encode(req), parsed)
                 local message = escapeHTML(parsed.body)
-                local room = escapeHTML(parsed.room) or defaultRoom
-                local name = escapeHTML(parsed.name) or anonName
                 if not message or message == "" then
                     errorcode(res, 400, "no message or body")
                     print "No message, ignoring"
                     return
                 else
+                    local room = escapeHTML(parsed.room) or defaultRoom
+                    local name = escapeHTML(parsed.name) or anonName
                     print(("new comment in %s by %s: %s"):format(room, name, message))
                     if not comments[room] then
                         comments[room] = {}
@@ -102,9 +100,12 @@ local function onRequest_real(req, res, url)
                     return
                 end
             end
-        elseif fs.existsSync("./website"..path) then
-            respond(res, types[path:match("^.+[.](.+)$")] or types.html, fs.readFileSync("./website"..path))
-            return
+        else
+            local path = path:gsub("%.%.", ""):gsub("[^%w%._/-]", "")
+            if fs.existsSync("./website"..path) then
+                respond(res, types[path:match("^.+[.](.+)$")] or types.html, fs.readFileSync("./website"..path))
+                return
+            end
         end
         if not body then
             body = tostring(code)
