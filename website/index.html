@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title data-i18n="headerTitle">篠栗町の88タイム お遍路コース</title>
+
+  <meta property="og:title" content="篠栗町 88タイム お遍路ページ" />
+  <meta property="og:description" content="学びと健康をつなぐ歴史の旅へ" />
+  <meta property="og:image" content="nehan.jpg" />
+
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrZj/k7ujTTXrwJlV2XUv1CzVA77+2x31aX9U2Z6Y9d3y7SH1G5Kj5rYva7CXz1eO8UlMr3GBzcv4+w9dg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <script src="util.js"></script>
+  <script src="quizData.js"></script>
+  <script src="translations.js"></script>
+</head>
+<body>
+  <header>
+    <h1 data-i18n="headerTitle">篠栗町の88タイム お遍路コース</h1>
+    <p data-i18n="headerSubtitle">学びと健康をつなぐ歴史の旅へ</p>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2>🗺 <span data-i18n="sectionAboutTitle">お遍路とは？</span></h2>
+      <p data-i18n="sectionAboutText">
+        お遍路とは、弘法大師・空海ゆかりの地を巡る信仰の旅です。篠栗町では四国八十八箇所を模した巡礼が行われており、88ヶ所すべてを巡ることで、心身の健康や精神の成長を願います。
+      </p>
+      <img src="nehan.jpg" alt="涅槃像" class="main-image" />
+      <p data-i18n="sectionAboutImageDesc">これは篠栗町の南蔵院にある涅槃像で、世界最大級の屋外涅槃像です。</p>
+    </section>
+
+    <section class="card">
+      <h2>📖 <span data-i18n="sectionLearnTitle">お遍路について学ぼう</span></h2>
+      <p data-i18n="sectionLearnIntro" class="learn-intro">
+        ここでは、お遍路についての基礎知識とクイズの問題解説を紹介します。まずは以下の12のテーマを読み、理解を深めてください。理解したら「クイズを始める」ボタンからチャレンジしましょう。
+      </p>
+      <div id="learn-grid" class="learn-grid"></div>
+    </section>
+
+    <section class="card">
+      <h2>🧠 <span data-i18n="sectionQuizTitle">クイズに挑戦</span></h2>
+      <div id="quiz-controls" class="quiz-controls">
+        <label for="difficulty-select" data-i18n="quizDifficultyLabel">難易度を選ぶ：</label>
+        <select id="difficulty-select">
+          <option value="all" data-i18n="quizDifficultyAll">すべて</option>
+          <option value="easy" data-i18n="quizDifficultyEasy">かんたん</option>
+          <option value="medium" data-i18n="quizDifficultyMedium">ふつう</option>
+          <option value="hard" data-i18n="quizDifficultyHard">むずかしい</option>
+        </select>
+        <button id="start-btn" class="start-btn" data-i18n="quizStartButton">クイズを始める</button>
+      </div>
+      <div id="question-container" class="hidden">
+        <div id="question"></div>
+        <div id="answer-buttons" class="answer-buttons"></div>
+        <div id="progress-bar"><div id="progress-fill"></div></div>
+        <div id="quiz-result"></div>
+      </div>
+      <div id="score-display"></div>
+    </section>
+
+    <section class="card">
+      <h2>📍 <span data-i18n="sectionMapTitle">南蔵院の地図</span></h2>
+      <div id="map"></div>
+    </section>
+
+    <section class="card comment-section">
+      <h2>💬 <span data-i18n="sectionCommentTitle">コメント投稿</span></h2>
+      <form id="comment-form">
+        <input type="text" id="name-input" placeholder="名前を入力してください" data-i18n-placeholder="namePlaceholder" required />
+        <input type="text" id="comment-input" placeholder="コメントを入力してください" data-i18n-placeholder="commentPlaceholder" required />
+        <button type="submit" data-i18n="commentSubmitButton">投稿</button>
+      </form>
+      <div id="comment-list"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 篠栗町88タイムプロジェクト</p>
+  </footer>
+
+  <!-- 詳細モーダル -->
+  <div id="modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title" tabindex="-1">
+    <div class="modal-content">
+      <button id="modal-close" class="modal-close" aria-label="閉じる">&times;</button>
+      <h3 id="modal-title"></h3>
+      <p id="modal-description"></p>
+    </div>
+  </div>
+
+  <div class="lang-switcher">
+    <button class="lang-btn active" data-lang="ja">日本語</button>
+    <button class="lang-btn" data-lang="en">English</button>
+    <button class="lang-btn" data-lang="zh">中文</button>
+    <button class="lang-btn" data-lang="ko">한국어</button>
+  </div>
+
+  <script src="script.js"></script>
+  <!-- Leaflet.js CDN追加 -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+</body>
+</html>
