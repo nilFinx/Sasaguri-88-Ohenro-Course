@@ -1,3 +1,6 @@
+// WARNING: Do NOT TOUCH THE LANGAUGE IMPLEMENTATION!!!
+// IT ALREADY WORKS WELL ENOUGH, AND YOU WOULD NEVER BE ABLE TO GET IT WORKING AGAIN!!
+
 // ======= グローバル変数 =======
 let currentLang = "ja";
 let currentQuizIndex = 0;
@@ -72,20 +75,27 @@ function closeModal() {
 // ======= 言語更新 =======
 function updateLanguage() {
   displayLearnCards();
-  document.querySelectorAll("[data-i18n]").forEach(el => {
+    document.querySelectorAll("[data-i18n]").forEach(el => {
     const key = el.getAttribute("data-i18n");
-    if (translations[key]) el.textContent = translations[key][currentLang];
+    if (translations[key]) el.innerHTML = translations[key][currentLang];
   });
   document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
     const key = el.getAttribute("data-i18n-placeholder");
     if (translations[key]) el.setAttribute("placeholder", translations[key][currentLang]);
   });
+  document.querySelectorAll("*").forEach(el => {
+    el.childNodes.forEach(node => {
+      if (node.nodeType === Node.TEXT_NODE) {
+        const key = node.textContent.trim();
+        if (translations[key]) {
+          node.textContent = translations[key][currentLang];
+        }
+      }
+    });
+  });
   if (filteredQuizzes.length > 0) showQuestion();
   addOrUpdateMapMarker();
 }
-
-// ======= クイズ =======
-startBtn.addEventListener("click", startQuiz);
 
 function startQuiz() {
   currentQuizIndex = 0;
@@ -234,7 +244,6 @@ function addComment(text, name, time) {
     <div class="comment-date">${name} - ${dateStr}</div>
   `;
   commentList.insertBefore(card, commentList.firstChild);
-  setTimeout(() => card.classList.add('show'), 10);
 }
 
 // ======= 多言語自動判定 =======
@@ -249,9 +258,7 @@ window.addEventListener('DOMContentLoaded', () => {
     if (btn) btn.classList.add("active");
   }
   updateLanguage();
-  if (document.getElementById('map')) {
-    initOpenFreeMap();
-  }
+  if (document.getElementById('map')) { initOpenFreeMap(); }
 
   // load comments!
   fetch('/api/get')
@@ -264,11 +271,3 @@ window.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// クイズ開始時ローディング
-startBtn.addEventListener("click", () => {
-  showLoading();
-  setTimeout(() => {
-    startQuiz();
-    hideLoading();
-  }, 600);
-});
