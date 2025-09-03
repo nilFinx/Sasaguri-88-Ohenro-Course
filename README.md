@@ -9,7 +9,7 @@ This website has two parts:
 
 This project depends on Luvit. Everything else is under `main.lua`. Website configuration is also included there, at the top part.
 
-`luvit main.lua`
+```luvit main.lua```
 
 ## Server API(for other projects)
 
