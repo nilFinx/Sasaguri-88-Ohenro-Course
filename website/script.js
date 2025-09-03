@@ -233,7 +233,7 @@ function addComment(text, name, time) {
     <span>${text}</span>
     <div class="comment-date">${name} - ${dateStr}</div>
   `;
-  commentList.appendChild(card);
+  commentList.insertBefore(card, commentList.firstChild);
   setTimeout(() => card.classList.add('show'), 10);
 }
 
