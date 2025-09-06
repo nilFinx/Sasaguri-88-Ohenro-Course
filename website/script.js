@@ -6,7 +6,7 @@ let currentLang = "ja";
 let currentQuizIndex = 0;
 let score = 0;
 let filteredQuizzes = [];
-let mapInstance = null;
+let mapInstance = L.map('map').setView([33.619846, 130.572904], 15);;
 let mapMarker = null;
 
 // ======= HTML要素取得 =======
@@ -24,6 +24,32 @@ const modal = document.getElementById("modal");
 const modalTitle = document.getElementById("modal-title");
 const modalDesc = document.getElementById("modal-description");
 const modalClose = document.getElementById("modal-close");
+
+const attribution = '&copy; OpenStreetMap &copy; CARTO'
+
+const map_light = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+  attribution: attribution,
+  subdomains: 'abcd',
+  maxZoom: 20
+});
+
+const map_dark = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+  attribution: attribution,
+  subdomains: 'abcd',
+  maxZoom: 20
+});
+
+function addOrUpdateMapMarker() {
+  if (!mapInstance) return;
+  if (mapMarker) {
+    mapMarker.setPopupContent(translations.mapPinText[currentLang]);
+  } else {
+    mapMarker = L.marker([33.619846, 130.572904])
+      .addTo(mapInstance)
+      .bindPopup(translations.mapPinText[currentLang])
+      .openPopup();
+  }
+}
 
 // ======= 多言語切替 =======
 langButtons.forEach(btn => {
@@ -47,10 +73,6 @@ function displayLearnCards() {
     div.setAttribute("role", "button");
     div.setAttribute("aria-label", card.title[currentLang]);
     div.innerHTML = `<h3>${card.title[currentLang]}</h3><p>${card.text[currentLang]}</p>`;
-    div.addEventListener("click", () => openModal(card));
-    div.addEventListener("keydown", e => {
-      if (e.key === "Enter" || e.key === " ") openModal(card);
-    });
     learnGrid.appendChild(div);
   });
 }
@@ -154,25 +176,20 @@ function updateProgress() {
 }
 
 function showScore() {
+  let percent = filteredQuizzes.length ? Math.round((score / filteredQuizzes.length) * 100) : 0;
   quizResult.textContent = `${score}/${filteredQuizzes.length} ${currentLang === "ja" ? "正解" : translations.quizResultText ? translations.quizResultText[currentLang] : "Correct"}`;
-  scoreDisplay.textContent = `${currentLang === "ja" ? "あなたのスコア" : translations.scoreDisplayText ? translations.scoreDisplayText[currentLang] : "Your Score"}: ${score}`;
+  scoreDisplay.textContent = `${currentLang === "ja" ? "あなたのスコア" : translations.scoreDisplayText ? translations.scoreDisplayText[currentLang] : "Your Score"}: ${percent}%`;
 
   // 正答率グラフ
-  let percent = filteredQuizzes.length ? Math.round((score / filteredQuizzes.length) * 100) : 0;
   let graph = document.getElementById('score-graph');
   if (!graph) {
     graph = document.createElement('div');
     graph.id = 'score-graph';
-    graph.style.margin = '1rem auto';
-    graph.style.width = '80%';
-    graph.style.height = '24px';
-    graph.style.background = '#e3eafc';
-    graph.style.borderRadius = '12px';
-    graph.style.overflow = 'hidden';
     scoreDisplay.parentNode.insertBefore(graph, scoreDisplay.nextSibling);
   }
-  graph.innerHTML = `<div style="height:100%;width:${percent}%;background:linear-gradient(90deg,#2ecc71 60%,#3498db 100%);border-radius:12px;text-align:right;color:white;font-weight:700;padding-right:8px;">${percent}%</div>`;
-
+  if (percent != 0) {
+    graph.innerHTML = `<div style="height:100%;width:${percent}%;border-radius:12px;text-align:right;color:white;font-weight:700;padding-right:8px;"></div>`;
+  }
   // 問題ごとの正誤一覧
   let detail = document.getElementById('score-detail');
   if (!detail) {
@@ -185,7 +202,7 @@ function showScore() {
   let html = `<ul style="padding-left:1.2em;">`;
   for (let i = 0; i < filteredQuizzes.length; i++) {
     html += `<li style="margin-bottom:4px;">
-      <span style="font-weight:700;">${filteredQuizzes[i].question[currentLang]}</span>
+      <span class="answer" style="font-weight:700;">${filteredQuizzes[i].question[currentLang]}</span>
       <span style="margin-left:8px;color:${i < score ? '#2ecc71' : '#e74c3c'};">${i < score ? '✔' : '✖'}</span>
     </li>`;
   }
@@ -194,13 +211,42 @@ function showScore() {
 }
 
 // ======= ダークモード切替 =======
-const darkModeBtn = document.createElement('button');
-darkModeBtn.textContent = "🌙";
-darkModeBtn.className = "darkmode-btn";
-darkModeBtn.title = "ダークモード切替";
-document.body.appendChild(darkModeBtn);
 
-darkModeBtn.addEventListener("click", () => {
+const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
+
+let currentTheme = localStorage.getItem("theme");
+if (currentTheme == "dark") {
+  document.body.classList.toggle("darkmode");
+} else if (currentTheme == "light") {
+  document.body.classList.toggle("lightmode");
+}
+
+function updateMapColor() {
+  if (currentTheme == "dark") {
+    map_dark.addTo(mapInstance);
+  } else {
+    map_light.addTo(mapInstance);
+  }
+}
+
+document.getElementById('darkmode-btn').addEventListener("click", () => {
+  if (prefersDarkScheme.matches) {
+    document.body.classList.toggle("lightmode");
+    var theme = document.body.classList.contains("lightmode")
+      ? "light"
+      : "dark";
+  } else {
+    document.body.classList.toggle("darkmode");
+    var theme = document.body.classList.contains("darkmode")
+      ? "dark"
+      : "light";
+  }
+
+  currentTheme = theme
+
+  updateMapColor();
+
+  localStorage.setItem("theme", theme);
   document.body.classList.toggle("darkmode");
 });
 
@@ -244,6 +290,9 @@ function addComment(text, name, time) {
     <div class="comment-date">${name} - ${dateStr}</div>
   `;
   commentList.insertBefore(card, commentList.firstChild);
+  setTimeout(() => {
+    card.className = 'comment-card show';
+  }, 100);
 }
 
 // ======= 多言語自動判定 =======
@@ -258,7 +307,7 @@ window.addEventListener('DOMContentLoaded', () => {
     if (btn) btn.classList.add("active");
   }
   updateLanguage();
-  if (document.getElementById('map')) { initOpenFreeMap(); }
+  if (document.getElementById('map')) { addOrUpdateMapMarker(); updateMapColor(); }
 
   // load comments!
   fetch('/api/get')

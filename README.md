@@ -17,4 +17,5 @@ This project depends on Luvit. Everything else is under `main.lua`. Website conf
 `api/create` - POST, creates a comment, and returns the anti-XSS version alongside the timestamp. `body` is required, `name` and `room` is optional.
 
 ## Disclaimer for HC/SoM
+
 The website was mostly vibe coded, and I added some improvements on it. The vibe coded time was never counted.
