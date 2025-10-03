@@ -1,8 +1,10 @@
 #!/usr/bin/env luvit
+---@diagnostic disable: need-check-nil
+
 
 local anonName = "unknown"
 local defaultRoom = "index"
-local host = "127.0.0.1" -- advanced
+local host = nil -- advanced
 local port = 3621
 local httpsPort = 6268
 local useHTTP = true
@@ -12,6 +14,10 @@ local http = require "http"
 local querystring = require "querystring"
 local json = require "json"
 local fs = require "fs"
+
+local exists = fs.existsSync
+
+require "string-extensions"
 
 local types = {
 	json = "application/json",
@@ -66,7 +72,8 @@ local function onRequest_real(req, res, url)
 
         local code = 404
         local path = req.url == "/" and "/index.html" or url.pathname
-        if path:find("^/api/") then
+        if path:startswith("/api/") then
+            print("API called: "..path)
             local command = path:sub(6)
             if command == "create" then
                 -- new comment!
@@ -98,6 +105,13 @@ local function onRequest_real(req, res, url)
                     res:setHeader("Content-Length", #body)
                     res:finish(body)
                     return
+                else
+                    local body = "204 No content"
+                    res.statusCode = 204
+                    res:setHeader("Content-Type", "text/plain")
+                    res:setHeader("Content-Length", #body)
+                    res:finish(body)
+                    return
                 end
             end
         else
@@ -121,7 +135,10 @@ end
 local function onRequest(req, res)
 	local t = os.clock()
 	local url = http.parseUrl(req.url)
-	onRequest_real(req, res, url)
+	local suc, err = pcall(onRequest_real, req, res, url)
+    if not suc then
+        print("Error: "..err)
+    end
 	print(url.pathname.. " took "..tostring(os.clock() - t).."s")
 end
 
@@ -130,7 +147,7 @@ if useHTTP then
 	print(("HTTP server running at http://%s:%i"):format(host, port))
 end
 
-if useHTTPS then
+if useHTTPS and exists "key.pem" and exists "cert.pem" then
 	local https = require "https"
 	https.createServer({
 		key = fs.readFileSync("key.pem"),
