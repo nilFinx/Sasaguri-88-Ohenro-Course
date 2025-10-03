@@ -1,7 +1,6 @@
 #!/usr/bin/env luvit
 ---@diagnostic disable: need-check-nil
 
-
 local anonName = "unknown"
 local defaultRoom = "index"
 local host = nil -- advanced
