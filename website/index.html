@@ -17,11 +17,24 @@
   <script src="quizData.js"></script>
   <script src="translations.js"></script>
 
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 </head>
 <body>
+<div class="menu-icon" onclick="toggleMenu()">☰</div>
+<nav id="menu" class="hidden">
+  <a href="main.html">お遍路歴史</a>
+  <a href="sub.html">お遍路初心者</a>
+  <a href="special.html">まとめサイト</a>
+</nav>
   <header>
+  <section class="share-buttons">
+  <a href="https://twitter.com/intent/tweet?text=篠栗町88タイムお遍路コース&url=https://example.com" 
+     target="_blank" 
+     class="share-btn twitter">
+    <i class="fab fa-twitter"></i> Xで共有
+  </a>
+</section>
     <h1 data-i18n="headerTitle">篠栗町の88タイム お遍路コース</h1>
     <div class="header-sub">
       <left>
@@ -67,7 +80,7 @@
           <option value="medium" data-i18n="quizDifficultyMedium">ふつう</option>
           <option value="hard" data-i18n="quizDifficultyHard">むずかしい</option>
         </select>
-        <button onclick="startQuiz();" class="start-btn" data-i18n="quizStartButton">クイズを始める</button>
+        <button id="start-btn" class="start-btn" data-i18n="quizStartButton">クイズを始める</button>
       </div>
       <div id="question-container" class="hidden">
         <div id="question"></div>
@@ -87,7 +100,7 @@
       <h2>💬 <span data-i18n="sectionCommentTitle">コメント投稿</span></h2>
       <form id="comment-form">
         <input type="text" id="name-input" placeholder="名前を入力してください" data-i18n-placeholder="namePlaceholder" />
-        <input type="text" id="comment-input" placeholder="コメントを入力してください" data-i18n-placeholder="commentPlaceholder" required />
+        <input type="text" id="comment-input" placeholder="コメントを入力してください" data-i18n-placeholder="commentPlaceholder" />
         <button type="submit" data-i18n="commentSubmitButton">投稿</button>
       </form>
       <div id="comment-list"></div>
@@ -98,6 +111,7 @@
     <p>&copy; 2025 篠栗町88タイムプロジェクト</p>
   </footer>
 
+  <!-- 詳細モーダル -->
   <div id="modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title" tabindex="-1">
     <div class="modal-content">
       <button id="modal-close" class="modal-close" aria-label="閉じる">&times;</button>
