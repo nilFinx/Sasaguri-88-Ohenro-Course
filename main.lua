@@ -66,7 +66,7 @@ local function onRequest_real(req, res, url)
 
         local code = 404
         local path = req.url == "/" and "/index.html" or url.pathname
-        if path:find("/api/") then
+        if path:find("^/api/") then
             local command = path:sub(6)
             if command == "create" then
                 -- new comment!
