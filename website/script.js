@@ -1,12 +1,9 @@
-// WARNING: Do NOT TOUCH THE LANGAUGE IMPLEMENTATION!!!
-// IT ALREADY WORKS WELL ENOUGH, AND YOU WOULD NEVER BE ABLE TO GET IT WORKING AGAIN!!
-
 // ======= グローバル変数 =======
 let currentLang = "ja";
 let currentQuizIndex = 0;
 let score = 0;
 let filteredQuizzes = [];
-let mapInstance = L.map('map').setView([33.619846, 130.572904], 15);;
+let mapInstance = null;
 let mapMarker = null;
 
 // ======= HTML要素取得 =======
@@ -24,14 +21,14 @@ const modal = document.getElementById("modal");
 const modalTitle = document.getElementById("modal-title");
 const modalDesc = document.getElementById("modal-description");
 const modalClose = document.getElementById("modal-close");
+const nav = document.getElementById("nav");
+const navClose = document.getElementById("nav-close");
 
 const attribution = '&copy; OpenStreetMap &copy; CARTO'
 
-const map_light = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-  attribution: attribution,
-  subdomains: 'abcd',
-  maxZoom: 20
-});
+const map_light = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+  });
 
 const map_dark = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
   attribution: attribution,
@@ -51,17 +48,9 @@ function addOrUpdateMapMarker() {
   }
 }
 
-// ======= 多言語切替 =======
-langButtons.forEach(btn => {
-  btn.addEventListener("click", () => {
-    if (currentLang !== btn.dataset.lang) {
-      currentLang = btn.dataset.lang;
-      langButtons.forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-      updateLanguage();
-    }
-  });
-});
+function toggleMenu() {
+  menu.classList.toggle('show');
+}
 
 // ======= 学習カード表示 =======
 function displayLearnCards() {
@@ -73,6 +62,10 @@ function displayLearnCards() {
     div.setAttribute("role", "button");
     div.setAttribute("aria-label", card.title[currentLang]);
     div.innerHTML = `<h3>${card.title[currentLang]}</h3><p>${card.text[currentLang]}</p>`;
+    div.addEventListener("click", () => openModal(card));
+    div.addEventListener("keydown", e => {
+      if (e.key === "Enter" || e.key === " ") openModal(card);
+    });
     learnGrid.appendChild(div);
   });
 }
@@ -81,6 +74,7 @@ function displayLearnCards() {
 function openModal(card) {
   openModal_raw(card.title[currentLang], card.text[currentLang]);
 }
+
 function openModal_raw(title, text) {
   modalTitle.textContent = title;
   modalDesc.textContent = text;
@@ -88,7 +82,7 @@ function openModal_raw(title, text) {
   modal.setAttribute("aria-hidden", "false");
   modalClose.focus();
 }
-modalClose.addEventListener("click", closeModal);
+
 function closeModal() {
   modal.classList.add("hidden");
   modal.setAttribute("aria-hidden", "true");
@@ -97,28 +91,19 @@ function closeModal() {
 // ======= 言語更新 =======
 function updateLanguage() {
   displayLearnCards();
-    document.querySelectorAll("[data-i18n]").forEach(el => {
+  document.querySelectorAll("[data-i18n]").forEach(el => {
     const key = el.getAttribute("data-i18n");
-    if (translations[key]) el.innerHTML = translations[key][currentLang];
+    if (translations[key]) el.textContent = translations[key][currentLang];
   });
   document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
     const key = el.getAttribute("data-i18n-placeholder");
     if (translations[key]) el.setAttribute("placeholder", translations[key][currentLang]);
   });
-  document.querySelectorAll("*").forEach(el => {
-    el.childNodes.forEach(node => {
-      if (node.nodeType === Node.TEXT_NODE) {
-        const key = node.textContent.trim();
-        if (translations[key]) {
-          node.textContent = translations[key][currentLang];
-        }
-      }
-    });
-  });
   if (filteredQuizzes.length > 0) showQuestion();
   addOrUpdateMapMarker();
 }
 
+// ======= クイズ =======
 function startQuiz() {
   currentQuizIndex = 0;
   score = 0;
@@ -132,11 +117,18 @@ function startQuiz() {
   updateProgress();
 }
 
+function testQuiz() {
+  score = 15;
+  filteredQuizzes = quizData.map(card => card.quiz);
+  showScore();
+}
+
 function showQuestion() {
   if (currentQuizIndex >= filteredQuizzes.length) {
     showScore();
     return;
   }
+
   const quiz = filteredQuizzes[currentQuizIndex];
   questionEl.textContent = quiz.question[currentLang];
   answerButtons.innerHTML = "";
@@ -166,17 +158,13 @@ function selectAnswer(button, correct) {
   setTimeout(() => {
     currentQuizIndex++;
     showQuestion();
-    updateProgress();
+    const percent = filteredQuizzes.length === 0 ? 0 : (currentQuizIndex / filteredQuizzes.length) * 100;
+    progressFill.style.width = percent + "%";
   }, 800);
 }
 
-function updateProgress() {
-  const percent = filteredQuizzes.length === 0 ? 0 : (currentQuizIndex / filteredQuizzes.length) * 100;
-  progressFill.style.width = percent + "%";
-}
-
 function showScore() {
-  let percent = filteredQuizzes.length ? Math.round((score / filteredQuizzes.length) * 100) : 0;
+  const percent = filteredQuizzes.length ? Math.round((score / filteredQuizzes.length) * 100) : 0;
   quizResult.textContent = `${score}/${filteredQuizzes.length} ${currentLang === "ja" ? "正解" : translations.quizResultText ? translations.quizResultText[currentLang] : "Correct"}`;
   scoreDisplay.textContent = `${currentLang === "ja" ? "あなたのスコア" : translations.scoreDisplayText ? translations.scoreDisplayText[currentLang] : "Your Score"}: ${percent}%`;
 
@@ -211,44 +199,36 @@ function showScore() {
 }
 
 // ======= ダークモード切替 =======
-
-const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
-
-let currentTheme = localStorage.getItem("theme");
-if (currentTheme == "dark") {
+let theme = localStorage.getItem("theme");
+if (theme == "dark") {
   document.body.classList.toggle("darkmode");
-} else if (currentTheme == "light") {
+} else if (theme == "light") {
   document.body.classList.toggle("lightmode");
 }
 
-function updateMapColor() {
-  if (currentTheme == "dark") {
+function updateColors() {
+  let theme = localStorage.getItem("theme");
+
+  if (!theme) {
+    theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
+  }
+
+  if (theme == "dark") {
+    mapInstance.removeLayer(map_light);
     map_dark.addTo(mapInstance);
   } else {
+    mapInstance.removeLayer(map_dark);
     map_light.addTo(mapInstance);
   }
+
+  document.body.classList.toggle("darkmode", theme == "dark");
 }
 
-document.getElementById('darkmode-btn').addEventListener("click", () => {
-  if (prefersDarkScheme.matches) {
-    document.body.classList.toggle("lightmode");
-    var theme = document.body.classList.contains("lightmode")
-      ? "light"
-      : "dark";
-  } else {
-    document.body.classList.toggle("darkmode");
-    var theme = document.body.classList.contains("darkmode")
-      ? "dark"
-      : "light";
-  }
-
-  currentTheme = theme
-
-  updateMapColor();
-
+function toggleDark() {
+  theme = theme == "dark" ? "light" : "dark";
   localStorage.setItem("theme", theme);
-  document.body.classList.toggle("darkmode");
-});
+  updateColors();
+}
 
 // ======= コメント機能強化 =======
 const commentForm = document.getElementById('comment-form');
@@ -266,7 +246,7 @@ commentForm.addEventListener('submit', e => {
   const name = document.getElementById('name-input').value.trim();
   fetch('/api/create', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({ name, body: text })
   })
     .then(res => res.json())
@@ -275,7 +255,7 @@ commentForm.addEventListener('submit', e => {
     })
     .catch(err => {
       openModal_raw(translations.commentErrorTitle[currentLang], err);
-      console.error('Failed to load:', err);
+      console.error('Failed to create:', err);
     });
   commentInput.value = '';
 });
@@ -290,28 +270,38 @@ function addComment(text, name, time) {
     <div class="comment-date">${name} - ${dateStr}</div>
   `;
   commentList.insertBefore(card, commentList.firstChild);
-  setTimeout(() => {
-    card.className = 'comment-card show';
-  }, 100);
+  setTimeout(() => card.classList.add('show'), 10);
 }
 
-// ======= 多言語自動判定 =======
+// ======= 読み込み =======
 window.addEventListener('DOMContentLoaded', () => {
   displayLearnCards();
   // 初期表示言語を自動判定
   const browserLang = navigator.language.slice(0,2);
+
   if (["ja","en","zh","ko"].includes(browserLang)) {
     currentLang = browserLang;
     langButtons.forEach(b => b.classList.remove("active"));
     const btn = Array.from(langButtons).find(b => b.dataset.lang === browserLang);
     if (btn) btn.classList.add("active");
   }
+
   updateLanguage();
-  if (document.getElementById('map')) { addOrUpdateMapMarker(); updateMapColor(); }
+
+  initOpenFreeMap();
+
+  updateColors();
 
   // load comments!
   fetch('/api/get')
-    .then(res => res.json())
+    .then(res => {
+      if (res.status == 204) {
+        console.warn("No comments found");
+        return [];
+      } else {
+        return res.json();
+      }
+    })
     .then(data => {
       data.forEach(item => addComment(item.body, item.name, item.timestamp));
     })
@@ -320,3 +310,20 @@ window.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+// ======= ボタン =======
+
+// 多言語切替
+langButtons.forEach(btn => {
+  btn.addEventListener("click", () => {
+    if (currentLang !== btn.dataset.lang) {
+      currentLang = btn.dataset.lang;
+      langButtons.forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      updateLanguage();
+    }
+  });
+});
+
+modalClose.addEventListener("click", closeModal);
+startBtn.addEventListener("click", startQuiz);
+darkmodeBtn.addEventListener("click", toggleDark);

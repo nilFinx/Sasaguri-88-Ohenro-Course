@@ -4,3 +4,10 @@ function shuffleArray(array) {
     [array[i], array[j]] = [array[j], array[i]];
   }
 }
+
+// ======= OpenFreeMap (OpenStreetMap) 表示 =======
+function initOpenFreeMap() {
+  if (!window.L || !document.getElementById('map')) return;
+  mapInstance = L.map('map').setView([33.619846, 130.572904], 15);
+  addOrUpdateMapMarker();
+}

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>お遍路サイト — プレミアム</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- HERO -->
+  <section class="site-hero" aria-hidden="false">
+    <div class="hero-bg" id="heroBg"></div>
+    <svg class="hero-deco" width="1400" height="400" viewBox="0 0 1400 400" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="left:-200px;top:-50px;">
+      <defs><linearGradient id="lg" x1="0" x2="1"><stop offset="0" stop-color="#ffd27a"/><stop offset="1" stop-color="#8f7aff"/></linearGradient></defs>
+      <path d="M0 200 C200 0, 700 400, 1400 200 L1400 400 L0 400 Z" fill="url(#lg)" opacity="0.18"/>
+    </svg>
+    <div class="hero-overlay"></div>
+
+    <header>
+      <div class="site-title" aria-hidden="false">
+        <span class="gtxt">お遍路サイト</span>
+      </div>
+      <div class="hero-sub">日本の伝統的な巡礼文化を、深く・美しく・分かりやすく。</div>
+    </header>
+  </section>
+
+  <!-- menu button -->
+  <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="navPanel" title="メニュー">
+    ☰
+  </button>
+
+  <!-- nav panel -->
+  <aside id="navPanel" class="nav-panel" role="dialog" aria-modal="false" aria-hidden="true">
+    <h3>ナビゲーション</h3>
+    <ul class="nav-list">
+      <li><a href="#history">お遍路の歴史</a></li>
+      <li><a href="#flow">巡礼の流れ</a></li>
+      <li><a href="#spot">おすすめスポット</a></li>
+      <li><a href="#knowledge">豆知識</a></li>
+      <li><a href="#experience">体験談</a></li>
+      <li><a href="#goods">おすすめグッズ</a></li>
+		  <li><a href="index.html" class="home-btn">ホーム</a></li>
+    </ul>
+    <div style="margin-top:18px;color:var(--muted);font-size:13px">© 2025 お遍路サイト</div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="app" id="mainContent">
+    <div class="grid" id="cardGrid">
+      <!-- Card: history -->
+      <article class="card" id="history" data-title="お遍路の歴史" data-img="images/history.jpg" tabindex="0">
+        <div class="card-media"><img src="images/history.jpg" alt="お遍路の歴史の風景" loading="lazy"></div>
+        <div class="card-body">
+          <div class="card-meta"><span class="badge">歴史</span><span>四国八十八ヶ所</span></div>
+          <h3>お遍路の歴史</h3>
+          <p>お遍路は弘法大師（空海）をたたえる巡礼で、長い歴史と信仰に根ざした文化です。寺院ごとの特色や古文書に残る逸話が魅力です。</p>
+          <div class="card-actions">
+            <button class="btn primary btn-open" data-id="history">詳しく見る</button>
+            <button class="btn btn-open-extra" data-id="history">現地へ行く</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card: flow -->
+      <article class="card" id="flow" data-title="巡礼の流れ" data-img="images/flow.jpg" tabindex="0">
+        <div class="card-media"><img src="images/flow.jpg" alt="巡礼の流れ" loading="lazy"></div>
+        <div class="card-body">
+          <div class="card-meta"><span class="badge">How-to</span><span>事前準備</span></div>
+          <h3>巡礼の流れ</h3>
+          <p>準備、参拝の作法、納経の仕方、宿泊や移動のコツなど、はじめての人にもわかりやすい手順をまとめています。</p>
+<div class="card-actions">
+  <button class="btn primary btn-open" data-id="flow">詳しく見る</button>
+  <!-- ここを変更 -->
+  <button class="btn btn-open-extra" data-id="flow-map">地図を表示</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card: spot -->
+      <article class="card" id="spot" data-title="おすすめスポット" data-img="images/spot.jpg" tabindex="0">
+        <div class="card-media"><img src="images/spot.jpg" alt="おすすめスポット" loading="lazy"></div>
+        <div class="card-body">
+          <div class="card-meta"><span class="badge">景観</span><span>絶景ポイント</span></div>
+          <h3>おすすめスポット</h3>
+          <p>寺院周辺の絶景スポットや季節ごとの見どころ、地元で人気の食べ物などを写真付きで紹介します。</p>
+          <div class="card-actions">
+            <button class="btn primary btn-open" data-id="spot">詳しく見る</button>
+            <button class="btn">ルートを見る</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card: knowledge -->
+      <article class="card" id="knowledge" data-title="豆知識" data-img="images/knowledge.jpg" tabindex="0">
+        <div class="card-media"><img src="images/knowledge.jpg" alt="豆知識" loading="lazy"></div>
+        <div class="card-body">
+          <div class="card-meta"><span class="badge">豆知識</span><span>伝統文化</span></div>
+          <h3>豆知識</h3>
+          <p>お接待や納経帳の意味、白衣や杖にまつわる話など、知っておくと旅が深まるトリビアを集めました。</p>
+          <div class="card-actions">
+            <button class="btn primary btn-open" data-id="knowledge">詳しく見る</button>
+            <button class="btn">もっと読む</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card: experience -->
+      <article class="card" id="experience" data-title="体験談" data-img="images/experience.jpg" tabindex="0">
+        <div class="card-media"><img src="images/experience.jpg" alt="体験談" loading="lazy"></div>
+        <div class="card-body">
+          <div class="card-meta"><span class="badge">体験談</span><span>リアルボイス</span></div>
+          <h3>体験談</h3>
+          <p>実際に巡礼した方の声を掲載。失敗談や感動の瞬間、役立つアドバイスが満載です。</p>
+          <div class="card-actions">
+            <button class="btn primary btn-open" data-id="experience">詳しく見る</button>
+            <button class="btn">ストーリーを読む</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card: goods -->
+      <article class="card" id="goods" data-title="おすすめグッズ" data-img="images/goods.jpg" tabindex="0">
+        <div class="card-media"><img src="images/goods.jpg" alt="おすすめグッズ" loading="lazy"></div>
+        <div class="card-body">
+          <div class="card-meta"><span class="badge">装備</span><span>便利グッズ</span></div>
+          <h3>おすすめグッズ</h3>
+          <p>白衣、納経帳、防水バッグ、疲れにくい靴など、快適に巡礼するためのおすすめアイテムを紹介します。</p>
+          <div class="card-actions">
+            <button class="btn primary btn-open" data-id="goods">詳しく見る</button>
+            <button class="btn">購入リスト</button>
+          </div>
+        </div>
+      </article>
+
+    </div>
+
+    <!-- footer inside main -->
+    <footer class="site-foot">
+      <small>© 2025 お遍路サイト — Created with care.</small>
+    </footer>
+  </main>
+
+  <!-- Single Modal (dynamic) -->
+  <div id="modalWrap" class="modal-wrap" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <button class="modal-close" id="modalClose" aria-label="閉じる">&times;</button>
+      <h2 id="modalTitle">タイトル</h2>
+      <div id="modalBody">詳細テキスト</div>
+    </div>
+  </div>
+
+  <!-- FontAwesome (icons) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" defer></script>
+  <script src="scripts.js"></script>
+</body>
+</html>

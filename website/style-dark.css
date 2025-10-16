@@ -1,0 +1,84 @@
+body.darkmode #quiz-controls {
+  background: #232a34;
+  box-shadow: 0 2px 8px rgba(44,62,80,0.22);
+}
+body.darkmode #difficulty-select,
+body.darkmode .start-btn,
+body.darkmode .comment-section button,
+body.darkmode .lang-btn {
+  background: linear-gradient(90deg, #232a34 60%, #3498db 100%);
+  color: #e0eafc;
+}
+body.darkmode .start-btn:hover,
+body.darkmode .comment-section button:hover,
+body.darkmode .lang-btn:hover {
+  background: linear-gradient(90deg, #3498db 60%, #232a34 100%);
+}
+
+body.darkmode #question-container {
+  background: linear-gradient(120deg, #232a34 60%, #2c3e50 100%);
+  border: 1px solid #232a34;
+  color: #e0eafc;
+}
+body.darkmode .answer-btn {
+  background: linear-gradient(90deg, #232a34 60%, #2c3e50 100%);
+  color: #e0eafc;
+  border: 1px solid #232a34;
+}
+body.darkmode .answer-btn:hover:not(:disabled) {
+  background: linear-gradient(90deg, #3498db 60%, #232a34 100%);
+}
+body.darkmode .answer-btn.correct {
+  background: linear-gradient(90deg, #2ecc71 60%, #27ae60 100%) !important;
+  color: #fff;
+}
+body.darkmode .answer-btn.incorrect {
+  background: linear-gradient(90deg, #e74c3c 60%, #c0392b 100%) !important;
+  color: #fff;
+}
+body.darkmode #progress-bar {
+  background: #232a34;
+}
+body.darkmode #progress-fill {
+  background: linear-gradient(90deg, #7ed6df 60%, #3498db 100%);
+}
+body.darkmode #score-display {
+  color: #7ed6df;
+}
+
+body.darkmode #map {
+  border: 2px solid #232a34;
+  box-shadow: 0 4px 16px rgba(44,62,80,0.32);
+}
+
+body.darkmode .comment-section input {
+  background: #232a34;
+  color: #e0eafc;
+  border: 1px solid #232a34;
+}
+body.darkmode #comment-list .comment-card {
+  background: linear-gradient(120deg, #232a34 60%, #2c3e50 100%);
+  border-left: 6px solid #7ed6df;
+  color: #e0eafc;
+}
+body.darkmode .comment-card button.delete-btn {
+  background: linear-gradient(90deg, #e74c3c 60%, #c0392b 100%);
+  color: #fff;
+}
+body.darkmode right {
+  background: #232a34;
+}
+body.darkmode .modal {
+  background: linear-gradient(120deg, rgba(44,62,80,0.95) 60%, rgba(52,152,219,0.95) 100%);
+}
+body.darkmode .modal-content {
+  background: linear-gradient(120deg, #232a34 60%, #2c3e50 100%);
+  border: 2px solid #232a34;
+  color: #e0eafc;
+}
+body.darkmode .modal-close {
+  color: #7ed6df;
+}
+body.darkmode .modal-close:hover {
+  color: #e74c3c;
+}

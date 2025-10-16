@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>お遍路の歴史</title>
+
+<!-- Font Awesome CDN -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+  /* リセット */
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: "Yu Gothic","Hiragino Kaku Gothic Pro","Meiryo",sans-serif;
+    background-color: #fdf6e3;
+    color: #333;
+    line-height: 1.6;
+  }
+
+  /* ヘッダー */
+  header {
+    background: linear-gradient(90deg,#3b5a6f,#2a3e4c);
+    color:#fff;
+    padding:30px 20px;
+    text-align:center;
+    position: relative;
+  }
+  header h1 {
+    font-size:2.5em;
+    margin-bottom:10px;
+    font-family:"Hiragino Mincho Pro","Yu Mincho","serif";
+  }
+  nav a {
+    color:#fff;
+    text-decoration:none;
+    margin:0 15px;
+    font-weight:bold;
+    transition:0.3s;
+  }
+  nav a:hover { text-decoration:underline; }
+
+  /* ホームボタン */
+  .home-btn {
+    position: absolute;
+    top:20px;
+    right:20px;
+    background:#f9f9f9;
+    color:#2a3e4c;
+    text-decoration:none;
+    padding:8px 16px;
+    border-radius:6px;
+    font-weight:bold;
+    box-shadow:0 4px 8px rgba(0,0,0,0.2);
+    transition:0.3s;
+  }
+  .home-btn:hover {
+    background:#3b5a6f;
+    color:#fff;
+  }
+
+  /* メインビジュアル */
+  .hero {
+    background: linear-gradient(135deg,#a8c0ff,#3f2b96);
+    height:300px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#fff;
+    text-shadow: 2px 2px 6px rgba(0,0,0,0.6);
+  }
+  .hero h2 { font-size:2em; text-align:center; }
+
+  /* 歴史カード */
+  .history-section {
+    max-width:1200px;
+    margin:50px auto;
+    display:grid;
+    grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
+    gap:30px;
+    padding:0 20px;
+  }
+  .card {
+    background:#fff;
+    border-radius:12px;
+    box-shadow:0 6px 15px rgba(0,0,0,0.1);
+    overflow:hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor:pointer;
+    position:relative;
+    text-align:center;
+    padding-bottom:20px;
+  }
+  .card:hover {
+    transform: translateY(-10px);
+    box-shadow:0 12px 25px rgba(0,0,0,0.2);
+  }
+
+  /* アイコン部分 */
+  .card-icon {
+    font-size:80px;
+    color:#3b5a6f;
+    margin:20px 0;
+  }
+
+  .card-content h3 {
+    margin-bottom:10px;
+    color:#2a3e4c;
+  }
+  .card-content p {
+    font-size:0.95em;
+    color:#555;
+    padding:0 10px;
+  }
+  .card button {
+    margin-top:15px;
+    background:#3b5a6f;
+    color:#fff;
+    border:none;
+    padding:8px 16px;
+    border-radius:6px;
+    cursor:pointer;
+    transition:0.3s;
+  }
+  .card button:hover { background:#2a3e4c; }
+
+  /* モーダル */
+  .modal {
+    display:none;
+    position:fixed;
+    top:0; left:0;
+    width:100%; height:100%;
+    background: rgba(0,0,0,0.7);
+    justify-content:center;
+    align-items:center;
+    z-index:100;
+    padding:20px;
+  }
+  .modal-content {
+    background:#fff;
+    padding:30px;
+    border-radius:12px;
+    max-width:700px;
+    max-height:90%;
+    overflow-y:auto;
+    position:relative;
+    animation:fadeIn 0.3s ease;
+  }
+  .modal-content h3 { margin-bottom:15px; color:#2a3e4c; }
+  .modal-content p { margin-bottom:10px; }
+  .close-btn {
+    position:absolute;
+    top:15px; right:15px;
+    background:#3b5a6f;
+    color:#fff;
+    border:none;
+    padding:5px 10px;
+    border-radius:6px;
+    cursor:pointer;
+  }
+  .close-btn:hover { background:#2a3e4c; }
+
+  @keyframes fadeIn {
+    from {opacity:0; transform:scale(0.9);}
+    to {opacity:1; transform:scale(1);}
+  }
+
+  /* フッター */
+  footer {
+    text-align:center;
+    padding:30px 20px;
+    background:#f0e6d2;
+    color:#333;
+    margin-top:50px;
+  }
+
+  @media(max-width:600px){
+    header h1 { font-size:1.8em; }
+    .hero h2 { font-size:1.4em; }
+    .card-icon { font-size:60px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>お遍路の歴史</h1>
+  <nav>
+    <a href="#overview">概要</a>
+    <a href="#cards">時代ごと</a>
+    <a href="#footer">参考資料</a>
+  </nav>
+  <a href="index.html" class="home-btn">ホーム</a>
+</header>
+
+<section id="cards" class="history-section">
+  <!-- 平安時代 -->
+  <div class="card" data-modal="modal1">
+    <div class="card-icon"><i class="fa-solid fa-landmark"></i></div>
+    <div class="card-content">
+      <h3>平安時代</h3>
+      <p>弘法大師（空海）が四国各地で修行。信仰の基礎が築かれる。</p>
+      <button>詳細</button>
+    </div>
+  </div>
+
+  <!-- 鎌倉時代 -->
+  <div class="card" data-modal="modal2">
+    <div class="card-icon"><i class="fa-solid fa-church"></i></div>
+    <div class="card-content">
+      <h3>鎌倉時代</h3>
+      <p>武士や庶民の信仰が拡大。巡礼者の記録も残る時代。</p>
+      <button>詳細</button>
+    </div>
+  </div>
+
+  <!-- 室町時代 -->
+  <div class="card" data-modal="modal3">
+    <div class="card-icon"><i class="fa-solid fa-scroll"></i></div>
+    <div class="card-content">
+      <h3>室町時代</h3>
+      <p>戦乱の影響で一時的に巡礼が減少。寺社の整備が進む。</p>
+      <button>詳細</button>
+    </div>
+  </div>
+
+  <!-- 江戸時代 -->
+  <div class="card" data-modal="modal4">
+    <div class="card-icon"><i class="fa-solid fa-users"></i></div>
+    <div class="card-content">
+      <h3>江戸時代</h3>
+      <p>庶民の間でお遍路ブーム。宿坊や案内書も整備され文化として定着。</p>
+      <button>詳細</button>
+    </div>
+  </div>
+
+  <!-- 明治時代 -->
+  <div class="card" data-modal="modal5">
+    <div class="card-icon"><i class="fa-solid fa-train-subway"></i></div>
+    <div class="card-content">
+      <h3>明治時代</h3>
+      <p>近代化で交通が発達。徒歩だけでなく船や鉄道を利用した巡礼も登場。</p>
+      <button>詳細</button>
+    </div>
+  </div>
+
+  <!-- 現代 -->
+  <div class="card" data-modal="modal6">
+    <div class="card-icon"><i class="fa-solid fa-person-walking"></i></div>
+    <div class="card-content">
+      <h3>現代</h3>
+      <p>精神修養や観光目的として遍路が再評価。歩き遍路・自転車・車巡礼が人気。</p>
+      <button>詳細</button>
+    </div>
+  </div>
+</section>
+
+<!-- モーダル -->
+<div id="modal1" class="modal">
+  <div class="modal-content">
+    <button class="close-btn">閉じる</button>
+    <h3>平安時代の遍路</h3>
+    <p>空海（弘法大師）が遍路の原型を開く。仏教の修行道として四国各地を巡り、信仰の基礎を築いた。初期は宗教的目的が中心であり、個人の精神修養が重視された。</p>
+  </div>
+</div>
+<div id="modal2" class="modal">
+  <div class="modal-content">
+    <button class="close-btn">閉じる</button>
+    <h3>鎌倉時代の遍路</h3>
+    <p>武士階級が信仰の中心となり、巡礼者が増加。寺社への寄進や参拝記録が残る。庶民の巡礼も徐々に広がり、地域に根付く文化となった。</p>
+  </div>
+</div>
+<div id="modal3" class="modal">
+  <div class="modal-content">
+    <button class="close-btn">閉じる</button>
+    <h3>室町時代の遍路</h3>
+    <p>戦乱や地方の混乱により巡礼は一時的に減少したが、寺社の整備が進む。信仰の道は地域コミュニティに支えられ、僧侶や修行者の役割が重要となる。</p>
+  </div>
+</div>
+<div id="modal4" class="modal">
+  <div class="modal-content">
+    <button class="close-btn">閉じる</button>
+    <h3>江戸時代の遍路</h3>
+    <p>庶民の間でお遍路ブームが起こる。宿坊・案内書が整備され、巡礼文化として四国全土に定着。観光的側面と宗教的側面が融合した時代。</p>
+  </div>
+</div>
+<div id="modal5" class="modal">
+  <div class="modal-content">
+    <button class="close-btn">閉じる</button>
+    <h3>明治時代の遍路</h3>
+    <p>近代化による交通の発達で、徒歩以外の巡礼が可能に。鉄道や船を活用する巡礼者も登場し、遍路のスタイルに変化が生まれた。</p>
+  </div>
+</div>
+<div id="modal6" class="modal">
+  <div class="modal-content">
+    <button class="close-btn">閉じる</button>
+    <h3>現代の遍路</h3>
+    <p>精神修養や観光目的で遍路が再評価され、多くの人々が参加。歩き遍路だけでなく、自転車や車での巡礼も一般的。ガイドブックやウェブ情報も充実している。</p>
+  </div>
+</div>
+
+<footer id="footer">
+  <p>参考資料：四国遍路文化資料館、Wikipedia、歴史書籍各種</p>
+</footer>
+
+<script>
+  const cards = document.querySelectorAll('.card');
+  const modals = document.querySelectorAll('.modal');
+  const closeBtns = document.querySelectorAll('.close-btn');
+
+  cards.forEach(card => {
+    card.querySelector('button').addEventListener('click', () => {
+      const modalId = card.dataset.modal;
+      document.getElementById(modalId).style.display = 'flex';
+    });
+  });
+
+  closeBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      btn.closest('.modal').style.display = 'none';
+    });
+  });
+
+  window.addEventListener('click', e => {
+    modals.forEach(modal => {
+      if(e.target === modal) modal.style.display = 'none';
+    });
+  });
+</script>
+
+</body>
+</html>
